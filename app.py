@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request, jsonify
 from montecarlo import monte_carlo_simulation
 
@@ -13,11 +14,12 @@ def simulate():
 
     result = monte_carlo_simulation(trials, bankroll, bet, False, True)
 
-    return jsonify({"result": "OK"})
+    return jsonify(result)
 
 @app.route("/")
 def home():
     return "Blackjack API is running"
 
 if __name__ == "__main__":
-    app.run()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
