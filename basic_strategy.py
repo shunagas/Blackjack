@@ -1,13 +1,24 @@
 # 基本戦略
 
+def decide_action(player_hand, dealer_upcard):
+    total = sum(player_hand)
+    has_ace = 11 in player_hand
+
+    if len(player_hand) == 2 and player_hand[0] == player_hand[1]:
+        return split_strategy(player_hand[0], dealer_upcard)
+
+    elif has_ace:
+        return soft_strategy(total, dealer_upcard)
+
+    else:
+        return hard_strategy(total, dealer_upcard)
+
 # ハード戦略（Aがない場合）
-def hard_strategy(player_hand, dealer_card):
-    from blackjack import hand_value
-    player_total = hand_value(player_hand)
+def hard_strategy(player_total, dealer_card):
     if player_total <= 8:
         return "HIT"
     elif player_total == 9:
-        if dealer_card in [2, 3, 4, 5, 6]:
+        if dealer_card in [3, 4, 5, 6]:
             return "DOUBLE DOWN"
         else:
             return "HIT"
@@ -17,7 +28,10 @@ def hard_strategy(player_hand, dealer_card):
         else:
             return "HIT"
     elif player_total == 11:
-        return "DOUBLE DOWN"
+        if dealer_card in [2, 3, 4, 5, 6, 7, 8, 9, 10]:
+            return "DOUBLE DOWN"
+        else:
+            return "HIT"
     elif player_total == 12:
         if dealer_card in [4, 5, 6]:
             return "STAND"
@@ -32,9 +46,7 @@ def hard_strategy(player_hand, dealer_card):
         return "STAND"
 
 # ソフト戦略（Aを含む場合）
-def soft_strategy(player_hand, dealer_card):
-    from blackjack import hand_value
-    player_total = hand_value(player_hand)
+def soft_strategy(player_total, dealer_card):
     if player_total <= 17:
         if dealer_card in [5,6]:
             return "DOUBLE DOWN"
@@ -52,37 +64,34 @@ def soft_strategy(player_hand, dealer_card):
 
 # スプリット戦略
 def split_strategy(player_hand, dealer_card):
-    from blackjack import hand_value
-    if player_hand[0] == 8 or player_hand[0] == 11:
+    if player_hand == 8 or player_hand == 11:
         return "SPLIT"
-    elif player_hand[0] == 2 or player_hand[0] == 3:
+    elif player_hand == 2 or player_hand == 3:
         if dealer_card in [4, 5, 6, 7]:
             return "SPLIT"
         else:
             return "HIT"
-    elif player_hand[0] == 4:
+    elif player_hand == 4:
         if dealer_card in [5, 6]:
             return "SPLIT"
         else:
             return "HIT"
-    elif player_hand[0] == 5:
+    elif player_hand == 5:
         return "DOUBLE DOWN"
-    elif player_hand[0] == 6:
+    elif player_hand == 6:
         if dealer_card in [2, 3, 4, 5, 6]:
             return "SPLIT"
         else:
             return "HIT"
-    elif player_hand[0] == 7:
+    elif player_hand == 7:
         if dealer_card in [2, 3, 4, 5, 6, 7]:
             return "SPLIT"
         else:
             return "HIT"
-    elif player_hand[0] == 9:
+    elif player_hand == 9:
         if dealer_card in [2, 3, 4, 5, 6, 8, 9]:
             return "SPLIT"
         else:
             return "STAND"
-    elif player_hand[0] == 10:
+    elif player_hand == 10:
         return "STAND"
-
-
