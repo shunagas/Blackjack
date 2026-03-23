@@ -37,6 +37,13 @@ def monte_carlo_simulation(trials, initial_balance, bet, bankroll_limit, use_str
     print(f"ハウスエッジ: {house_edge:.4f}%")
     print(f"期待値: {ev_per_hand:.4f}%")
 
+    return {
+        "trials": len(results),
+        "final_balance": balance,
+        "profit": profit,
+        "house_edge": house_edge,
+    }
+
 
 if __name__ == "__main__":
     trials = int(sys.argv[1])
